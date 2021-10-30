@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Todo List</title>
+<!-- (1) -->
+<link rel="stylesheet"
+       href="../../../resources/app/css/styles.css"
+       th:href="@{/resources/app/css/styles.css}">
+</head>
+<body>
+    <h1>Login Form List</h1>
+
+    <div id="loginForm">
+        <form
+          th:action="@{/login}"
+          method="post">
+            <table>
+                <tr>
+                    <td><label for="username">User Name</label></td>
+                    <td><input type="text" id="username" name="username"></td>
+                </tr>
+                <tr>
+                    <td><label for="password">Password</label></td>
+                    <td><input type="password" id="password" name="password"></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td><button>Login</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</body>
+</html>
