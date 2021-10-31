@@ -3,4 +3,12 @@ create table if not exists todo (
     todo_title varchar(30),
     finished boolean,
     created_at timestamp
-)
+);
+
+CREATE TABLE account(
+    username varchar(128),
+    password varchar(88),
+    first_name varchar(128),
+    last_name varchar(128),
+    constraint pk_tbl_account primary key (username)
+);
