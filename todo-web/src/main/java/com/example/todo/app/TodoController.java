@@ -21,6 +21,7 @@ import com.example.todo.app.TodoForm.TodoCreate;
 import com.example.todo.app.TodoForm.TodoDelete;
 import com.example.todo.app.TodoForm.TodoFinish;
 import com.example.todo.domain.model.Todo;
+import com.example.todo.domain.service.LoginAccount;
 import com.example.todo.domain.service.TodoService;
 import com.github.dozermapper.core.Mapper;
 
@@ -32,6 +33,9 @@ public class TodoController {
 
     @Inject
     Mapper beanMapper;
+    
+    @Inject
+    LoginAccount loginAccount;
 
     @ModelAttribute
     public TodoForm setUpForm() {
@@ -43,6 +47,7 @@ public class TodoController {
     public String list(Model model) {
         Collection<Todo> todos = todoService.findAll();
         model.addAttribute("todos", todos);
+        model.addAttribute("loginAccount", this.loginAccount);
         return "todo/list";
     }
 

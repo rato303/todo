@@ -22,11 +22,15 @@ public class AccountUserDetailsService implements UserDetailsService {
 	
     @Inject
     AccountRepository accountRepository;
+    
+    @Inject
+    LoginAccountImpl loginAccount;
 
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
     	Account account = accountRepository.findOneByUsername(username);
+    	this.loginAccount.setAccount(account);
     	return new AccountUserDetails(account, getAuthorities(account));
     }
 

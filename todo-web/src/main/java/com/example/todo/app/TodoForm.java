@@ -5,7 +5,10 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.example.todo.domain.service.LoginAccount;
+
 public class TodoForm implements Serializable {
+	
 	public static interface TodoCreate {
 	};
 
@@ -17,6 +20,8 @@ public class TodoForm implements Serializable {
 	}
 
 	private static final long serialVersionUID = 1L;
+	
+	private LoginAccount loginAccount;
 
 	// (2)
 	@NotNull(groups = { TodoFinish.class, TodoDelete.class })
@@ -41,5 +46,13 @@ public class TodoForm implements Serializable {
 	public void setTodoTitle(String todoTitle) {
 		this.todoTitle = todoTitle;
 	}
+	
+	public String getFullName() {
+		return this.loginAccount.getFullName();
+	}
 
+	public void setLoginAccount(LoginAccount loginAccount) {
+		this.loginAccount = loginAccount;
+	}
+	
 }
