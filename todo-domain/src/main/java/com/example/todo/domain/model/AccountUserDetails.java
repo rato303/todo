@@ -43,5 +43,11 @@ public class AccountUserDetails implements UserDetails {
     public Account getAccount() {
         return account;
     }
+    
+    public String getFullName() {
+    	String firstName = this.account.getFirstName();
+    	String lastName = this.account.getLastName();
+    	return lastName + " " + firstName;
+    }
 
 }
