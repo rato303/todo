@@ -11,6 +11,8 @@ public interface TodoRepository {
 	Todo findOne(String todoId);
 
 	List<Todo> findAll(Pageable pageable);
+	
+	Long countAll();
 
 	void create(Todo todo);
 

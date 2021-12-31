@@ -1,3 +1,4 @@
+delete from public.todo;
 insert into public.todo(todo_id,todo_title,finished,created_at) values ('133c6cf4-f8ee-44c5-aaa2-5d47b027b426','todo1',False,'2021/12/31 10:24:28.642');
 insert into public.todo(todo_id,todo_title,finished,created_at) values ('1c01f708-f305-439c-9667-c0ffc006f666','todo2',False,'2021/12/31 10:24:41.438');
 insert into public.todo(todo_id,todo_title,finished,created_at) values ('462ecf59-2b6f-4131-b954-4cafc750901d','todo3',False,'2021/12/31 10:24:31.726');

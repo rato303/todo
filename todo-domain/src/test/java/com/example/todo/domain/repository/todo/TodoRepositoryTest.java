@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ public class TodoRepositoryTest {
 	TodoRepository todoRepository;
 
 	@Test
+	@Sql(scripts = "classpath:META-INF/TodoRepository/testFindAll.sql")
 	public void testFindAll() {
 		// Setup
 		int pageNumber = 0;
@@ -43,6 +45,19 @@ public class TodoRepositoryTest {
 		
 		Todo actual1 = actuals.get(0);
 		assertThat(actual1.getTodoTitle()).isEqualTo("todo1");
+	}
+	
+	@Test
+	@Sql(scripts = "classpath:META-INF/TodoRepository/testFindAll.sql")
+	public void testCountAll() {
+		// Setup
+		// Nothing
+		
+		// Exercise
+		Long actual = todoRepository.countAll();
+		
+		// Verify
+		assertThat(actual).isEqualTo(9);
 	}
 
 }
