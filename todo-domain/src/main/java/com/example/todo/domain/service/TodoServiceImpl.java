@@ -1,11 +1,12 @@
 package com.example.todo.domain.service;
 
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terasoluna.gfw.common.exception.BusinessException;
@@ -20,7 +21,7 @@ import com.example.todo.domain.repository.todo.TodoRepository;
 @Transactional // (2)
 public class TodoServiceImpl implements TodoService {
 
-	private static final long MAX_UNFINISHED_COUNT = 5;
+	private static final long MAX_UNFINISHED_COUNT = 50;
 
 	@Inject // (3)
 	TodoRepository todoRepository;
@@ -40,8 +41,10 @@ public class TodoServiceImpl implements TodoService {
 
 	@Override
 	@Transactional(readOnly = true) // (7)
-	public Collection<Todo> findAll() {
-		return todoRepository.findAll();
+	public TodoList findAll(Pageable pageable) {
+		List<Todo> todos = todoRepository.findAll(pageable);
+		Long todoCount = todoRepository.countAll();
+		return TodoListImpl.make(todos, todoCount, pageable);
 	}
 
 	@Override

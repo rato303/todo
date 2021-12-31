@@ -1,10 +1,10 @@
 package com.example.todo.app;
 
-import java.util.Collection;
-
 import javax.inject.Inject;
 import javax.validation.groups.Default;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,17 +21,25 @@ import com.example.todo.app.TodoForm.TodoCreate;
 import com.example.todo.app.TodoForm.TodoDelete;
 import com.example.todo.app.TodoForm.TodoFinish;
 import com.example.todo.domain.model.Todo;
+import com.example.todo.domain.service.TodoList;
 import com.example.todo.domain.service.TodoService;
 import com.github.dozermapper.core.Mapper;
 
 @Controller
 @RequestMapping("todo")
 public class TodoController {
+	
     @Inject
     TodoService todoService;
 
     @Inject
     Mapper beanMapper;
+    
+    static Pageable FIRST_PAGEABLE;
+    
+    static {
+    	FIRST_PAGEABLE = PageRequest.of(1, 5);
+    }
 
     @ModelAttribute
     public TodoForm setUpForm() {
@@ -40,8 +48,8 @@ public class TodoController {
     }
 
     @RequestMapping(value = "list")
-    public String list(Model model) {
-        Collection<Todo> todos = todoService.findAll();
+    public String list(Model model, Pageable pageable) {
+        TodoList todos = todoService.findAll(pageable);
         model.addAttribute("todos", todos);
         return "todo/list";
     }
@@ -53,7 +61,7 @@ public class TodoController {
             RedirectAttributes attributes) {
 
         if (bindingResult.hasErrors()) {
-            return list(model);
+            return list(model, FIRST_PAGEABLE);
         }
 
         Todo todo = beanMapper.map(todoForm, Todo.class);
@@ -62,7 +70,7 @@ public class TodoController {
             todoService.create(todo);
         } catch (BusinessException e) {
             model.addAttribute(e.getResultMessages());
-            return list(model);
+            return list(model, FIRST_PAGEABLE);
         }
 
         attributes.addFlashAttribute(ResultMessages.success().add(
@@ -76,14 +84,14 @@ public class TodoController {
             BindingResult bindingResult, Model model,
             RedirectAttributes attributes) {
         if (bindingResult.hasErrors()) {
-            return list(model);
+            return list(model, FIRST_PAGEABLE);
         }
 
         try {
             todoService.finish(form.getTodoId());
         } catch (BusinessException e) {
             model.addAttribute(e.getResultMessages());
-            return list(model);
+            return list(model, FIRST_PAGEABLE);
         }
 
         attributes.addFlashAttribute(ResultMessages.success().add(
@@ -98,14 +106,14 @@ public class TodoController {
             RedirectAttributes attributes) {
 
         if (bindingResult.hasErrors()) {
-            return list(model);
+            return list(model, FIRST_PAGEABLE);
         }
 
         try {
             todoService.delete(form.getTodoId());
         } catch (BusinessException e) {
             model.addAttribute(e.getResultMessages());
-            return list(model);
+            return list(model, FIRST_PAGEABLE);
         }
 
         attributes.addFlashAttribute(ResultMessages.success().add(
