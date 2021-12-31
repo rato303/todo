@@ -1,12 +1,8 @@
 package com.example.todo.app;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.validation.groups.Default;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -25,6 +21,7 @@ import com.example.todo.app.TodoForm.TodoCreate;
 import com.example.todo.app.TodoForm.TodoDelete;
 import com.example.todo.app.TodoForm.TodoFinish;
 import com.example.todo.domain.model.Todo;
+import com.example.todo.domain.service.TodoList;
 import com.example.todo.domain.service.TodoService;
 import com.github.dozermapper.core.Mapper;
 
@@ -52,10 +49,8 @@ public class TodoController {
 
     @RequestMapping(value = "list")
     public String list(Model model, Pageable pageable) {
-        List<Todo> todos = todoService.findAll(pageable);
-        Page<Todo> page = new PageImpl<Todo>(todos, pageable, todos.size()); // TODO todos.sizeは全件数
+        TodoList todos = todoService.findAll(pageable);
         model.addAttribute("todos", todos);
-        model.addAttribute("page", page);  // pagination.htmlで利用する
         return "todo/list";
     }
 

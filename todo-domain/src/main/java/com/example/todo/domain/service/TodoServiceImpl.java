@@ -41,8 +41,10 @@ public class TodoServiceImpl implements TodoService {
 
 	@Override
 	@Transactional(readOnly = true) // (7)
-	public List<Todo> findAll(Pageable pageable) {
-		return todoRepository.findAll(pageable);
+	public TodoList findAll(Pageable pageable) {
+		List<Todo> todos = todoRepository.findAll(pageable);
+		Long todoCount = todoRepository.countAll();
+		return TodoListImpl.make(todos, todoCount, pageable);
 	}
 
 	@Override
