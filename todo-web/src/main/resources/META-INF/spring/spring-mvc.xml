@@ -82,6 +82,9 @@
            class="org.thymeleaf.spring5.SpringTemplateEngine">
         <property name="enableSpringELCompiler" value="true" />
         <property name="templateResolver" ref="templateResolver" />
+        <property name="additionalDialects">
+            <bean class="com.example.todo.app.PageInfoDialect"/>
+        </property>
     </bean>
     <bean id="beanNameViewResolver"
            class="org.springframework.web.servlet.view.BeanNameViewResolver">

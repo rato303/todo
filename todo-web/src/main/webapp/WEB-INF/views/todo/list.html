@@ -45,6 +45,9 @@
                     <button type="submit">Delete</button>
                 </form>
             </li>
+            <li>
+                <div th:object="${page}" th:replace="~{fragment/pagination :: pagination (${page})}"></div>
+            </li>
         </ul>
     </div>
 </body>
