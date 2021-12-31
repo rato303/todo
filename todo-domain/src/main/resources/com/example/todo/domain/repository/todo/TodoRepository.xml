@@ -29,7 +29,10 @@
     </select>
 
     <!-- (4) -->
-    <select id="findAll" resultMap="todoResultMap">
+    <select
+        id="findAll"
+        resultMap="todoResultMap"
+        parameterType="org.springframework.data.domain.Pageable">
     <![CDATA[
         SELECT
             todo_id,
@@ -38,6 +41,10 @@
             created_at
         FROM
             todo
+        order by
+            todo_title asc
+        limit #{pageSize}
+        offset #{offset}
     ]]>
     </select>
 
