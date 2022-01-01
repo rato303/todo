@@ -21,5 +21,20 @@
       order by
         a.account_name asc
     </select>
+    
+    <insert
+        id="insert"
+        parameterType="com.example.todo.domain.model.AccountForInsert">
+      insert into
+        public.account (
+            account_id
+          , account_name
+          , password
+        ) values ( 
+            #{id}
+          , #{name}
+          , #{password}
+        )
+    </insert>
 
 </mapper>
