@@ -2,9 +2,11 @@ package com.example.todo.domain.model;
 
 public class Account {
 
-	private String id;
+	String id;
 	
-	private String name;
+	String name;
+	
+	String password;
 
 	public String getId() {
 		return id;
@@ -12,6 +14,10 @@ public class Account {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 	
 }

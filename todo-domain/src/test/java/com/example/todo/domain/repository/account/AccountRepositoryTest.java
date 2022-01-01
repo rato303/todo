@@ -54,6 +54,22 @@ public class AccountRepositoryTest {
 	}
 	
 	@Test
+	@Sql(scripts = "classpath:META-INF/AccountRepository/testFindByName.sql")
+	public void testFindByName() {
+		// Setup
+		String name = "ユーザー1";
+		
+		// Exercise
+		Account actual = accountRepository.findByName(name);
+		
+		// Verify
+		assertThat(actual).isNotNull();
+		assertThat(actual.getId()).isEqualTo("id1");
+		assertThat(actual.getName()).isEqualTo("ユーザー1");
+		assertThat(actual.getPassword()).isEqualTo("pas1");
+	}
+	
+	@Test
 	@Sql(scripts = "classpath:META-INF/AccountRepository/testCreate.sql")
 	public void testCreate() {
 		
