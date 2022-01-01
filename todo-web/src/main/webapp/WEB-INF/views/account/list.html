@@ -11,9 +11,12 @@
   <h1>Account List</h1>
 
   <div>
-    <form>
-      <input type="text" />
-      <input type="password" />
+    <form
+      th:action="@{/account/create}"
+      method="post"
+      th:object="${accountForm}">
+      <input type="text" th:field="*{name}" />
+      <input type="password" th:field="*{password}" />
       <button type="submit">Create Account</button>
     </form>
   </div>
