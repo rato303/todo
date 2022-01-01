@@ -1,0 +1,98 @@
+﻿# A5:ER FORMAT:15
+# A5:ER ENCODING:UTF8
+# A5:ER Mk-1 Copyright © 2007 m.matsubara
+# A5:SQL Mk-2 Version 2.16.2 Copyright © 1997 - 2021 m.matsubara
+#  https://a5m2.mmatsubara.com
+
+[Manager]
+ProjectName=todo
+Author=
+MaxEntityRowShow=1000
+ReadOnlyRecommend=0
+Page=Main
+PageInfo="Main",2,"A3Landscape",$FFFFFF
+LogicalView=1
+DecodeDomain=0
+ViewModePageIndividually=1
+ViewMode=2
+ViewFormat=0
+UseNondependenceDashLine=0
+FontName=Tahoma
+FontSize=6
+PaperSize=A4Landscape
+HeaderLeft=
+HeaderCenter=
+HeaderRight=
+FooterLeft=
+FooterCenter=
+FooterRight=
+ShowPageoutRelation=1
+RDBMSType=6
+RDBMSTypeName=PostgreSQL
+DefaultPkName=%0:s_PKC
+DefaultPkIndexName=%0:s_PKI
+DefaultIndexName=%0:s_IX%1:d
+DefaultFkName=%0:s_FK%1:d
+SqlSeparator=0
+UpperCaseKeyword=0
+ShowTag=1
+ShowCommonAttributes=0
+
+[Entity]
+PName=account
+LName=アカウント
+Comment=
+TableOption=
+Page=Main
+Left=50
+Top=50
+Field="アカウント識別子","account_id","@VARCHAR(36)","NOT NULL",0,"","",$FFFFFFFF,""
+Field="アカウント名","account_name","@VARCHAR(128)","NOT NULL",,"","",$FFFFFFFF,""
+Field="パスワード","password","@VARCHAR(128)","NOT NULL",,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220101150723
+Position="Main",50,50
+ZOrder=1
+
+[Entity]
+PName=todo
+LName=TODO
+Comment=
+TableOption=
+Page=Main
+Left=350
+Top=100
+Field="TODO識別子","todo_id","@VARCHAR(36)","NOT NULL",0,"","",$FFFFFFFF,""
+Field="TODO名","todo_title","@VARCHAR(30)","NOT NULL",,"","",$FFFFFFFF,""
+Field="完了したかどうか","finished","@BOOLEAN","NOT NULL",,"","",$FFFFFFFF,""
+Field="作成日時","created_at","@DATETIME","NOT NULL",,"","",$FFFFFFFF,""
+Field="アカウント識別子","account_id","@VARCHAR(36)","NOT NULL",,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220101150754
+Position="Main",350,100
+ZOrder=2
+
+[Relation]
+Entity1=account
+Entity2=todo
+RelationType1=1
+RelationType2=3
+Fields1=account_id
+Fields2=account_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,6087,6111,5519,R,R,""
+Dependence=0
+Caption=
+PName=
+LineMode=0
+Bar1=609
+Bar2=611
+Bar3=552
+TermPos1=R
+TermPos2=R
+ZOrder=4
