@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.todo.domain.repository.account.AccountRepository">
+
+    <resultMap id="todoResultMap" type="com.example.todo.domain.model.Account">
+        <id property="id" column="account_id" />
+        <result property="name" column="account_name" />
+    </resultMap>
+
+    <select
+        id="findAll"
+        resultMap="todoResultMap"
+        parameterType="org.springframework.data.domain.Pageable">
+      select
+          a.account_id
+        , a.account_name
+      from
+        public.account a
+      order by
+        a.account_name asc
+    </select>
+    
+    <insert
+        id="insert"
+        parameterType="com.example.todo.domain.model.AccountForInsert">
+      insert into
+        public.account (
+            account_id
+          , account_name
+          , password
+        ) values ( 
+            #{id}
+          , #{name}
+          , #{password}
+        )
+    </insert>
+
+</mapper>
