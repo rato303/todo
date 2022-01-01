@@ -11,9 +11,12 @@
   <h1>Login Form</h1>
 
   <div>
-    <form>
-      <input type="text" />
-      <input type="password" />
+    <form
+      th:action="@{/login}"
+      method="post"
+      >
+      <input type="text" name="username" />
+      <input type="password" name="password" />
       <button type="submit">login</button>
     </form>
   </div>
