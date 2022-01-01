@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Account List</title>
+<link rel="stylesheet"
+       href="../../../resources/app/css/styles.css"
+       th:href="@{/resources/app/css/styles.css}">
+</head>
+<body>
+  <h1>Account List</h1>
+
+  <div>
+    <form>
+      <input type="text" />
+      <input type="password" />
+      <button type="submit">Create Account</button>
+    </form>
+  </div>
+  <hr />
+  <div>
+    <ul>
+      <li>
+        <span>アカウント名</span>
+        <form>
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>
