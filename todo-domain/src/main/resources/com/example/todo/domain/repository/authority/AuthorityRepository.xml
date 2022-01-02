@@ -20,6 +20,17 @@
       a.account_id = #{accountId}
     order by
       a.name
-    </select>
+  </select>
+  
+  <insert
+    id="insert">
+    insert into public.authority(
+        account_id
+      , name
+    ) values (
+        #{accountId}
+      , #{name}
+    )
+  </insert>
 
 </mapper>
