@@ -60,7 +60,7 @@ public class AccountForm {
 		}
 
 		@Override
-		public String getPassword() {
+		public String getRawPassword() {
 			return form.getPassword();
 		}
 		

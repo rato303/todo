@@ -1,6 +1,7 @@
 package com.example.todo.domain.service;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,9 +16,9 @@ import com.example.todo.domain.repository.account.AccountRepository;
 @Service
 @Transactional
 public class AccountUserDetailsService implements UserDetailsService {
-	
+
 	AccountRepository accountRepository;
-	
+
 	AccountUserDetailsService(AccountRepository accountRepository) {
 		this.accountRepository = accountRepository;
 	}
@@ -27,20 +28,20 @@ public class AccountUserDetailsService implements UserDetailsService {
 		Account account = accountRepository.findByName(username);
 		return new UserDetailsImpl(account);
 	}
-	
+
 	private class UserDetailsImpl implements UserDetails {
 
 		private static final long serialVersionUID = 1095316793216814073L;
-		
+
 		Account account;
-		
+
 		UserDetailsImpl(Account account) {
 			this.account = account;
 		}
 
 		@Override
 		public Collection<? extends GrantedAuthority> getAuthorities() {
-			throw new UnsupportedOperationException();
+			return Collections.emptyList();
 		}
 
 		@Override
@@ -67,7 +68,8 @@ public class AccountUserDetailsService implements UserDetailsService {
 
 		@Override
 		public boolean isCredentialsNonExpired() {
-			throw new UnsupportedOperationException();
+			// always
+			return true;
 		}
 
 		@Override
@@ -75,7 +77,7 @@ public class AccountUserDetailsService implements UserDetailsService {
 			// always
 			return true;
 		}
-		
+
 	}
 
 }

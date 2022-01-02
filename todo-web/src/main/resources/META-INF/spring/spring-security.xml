@@ -27,7 +27,9 @@
 
     <sec:authentication-manager>
       <sec:authentication-provider
-        user-service-ref="accountUserDetailsService" />
+        user-service-ref="accountUserDetailsService">
+        <sec:password-encoder ref="passwordEncoder" />
+      </sec:authentication-provider>
     </sec:authentication-manager>
     <bean
       id="accountUserDetailsService"
