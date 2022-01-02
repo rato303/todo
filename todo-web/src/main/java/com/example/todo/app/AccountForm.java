@@ -1,6 +1,6 @@
 package com.example.todo.app;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import java.util.UUID;
 
 import com.example.todo.domain.service.AccountCreateService.AccountForCreate;
 
@@ -50,8 +50,8 @@ public class AccountForm {
 
 		@Override
 		public String getId() {
-			// TODO とりあえずの実装
-			return RandomStringUtils.random(36);
+			UUID uuid = UUID.randomUUID();
+			return uuid.toString();
 		}
 
 		@Override
