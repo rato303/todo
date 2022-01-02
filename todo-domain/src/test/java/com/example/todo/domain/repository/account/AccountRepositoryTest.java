@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.assertj.db.api.Assertions;
+import org.assertj.db.type.Changes;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,11 +20,13 @@ import com.example.todo.domain.model.AccountForInsert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-	"classpath:test-context.xml",
-	"classpath:META-INF/spring/todo-infra.xml"
+	"classpath:META-INF/spring/test-infra.xml"
 })
 @Transactional
 public class AccountRepositoryTest {
+	
+	@Inject
+	Changes changes;
 	
 	@Inject
 	AccountRepository accountRepository;
@@ -79,36 +83,27 @@ public class AccountRepositoryTest {
 		account.name = "ユーザー1";
 		account.password = "pas1";
 		
+		// Before Exercise
+		changes.setStartPointNow();
+		
 		// Exercise
 		accountRepository.insert(account);
 		
-		// Verify
-		assertThat(accountRepository.findAll().size()).isEqualTo(1);
+		// After Exercise
+		changes.setEndPointNow();
 		
-		// TODO @Injectで取得できるDataSouceはRepositoryで利用しているConnectionと別物になっているので下記のコードで検証できない
-//		@Inject
-//		DataSource dataSource;
-//		// Before Exercise
-//		changes.setStartPointNow();
-//		
-//		// Exercise
-//		accountRepository.insert(account);
-//		
-//		// After Exercise
-//		changes.setEndPointNow();
-//		
-//		// Verify
-//		Assertions
-//			.assertThat(changes)
-//			.hasNumberOfChanges(1)
-//			.ofCreationOnTable("account")
-//				.hasNumberOfChanges(1)
-//			.changeOnTable("account")
-//				.isCreation()
-//				.rowAtEndPoint()
-//					.value("account_id").isEqualTo("id1")
-//					.value("account_name").isEqualTo("ユーザー1")
-//					.value("password").isEqualTo("pas1");
+		// Verify
+		Assertions
+			.assertThat(changes)
+			.hasNumberOfChanges(1)
+			.ofCreationOnTable("account")
+				.hasNumberOfChanges(1)
+			.changeOnTable("account")
+				.isCreation()
+				.rowAtEndPoint()
+					.value("account_id").isEqualTo("id1")
+					.value("account_name").isEqualTo("ユーザー1")
+					.value("password").isEqualTo("pas1");
 	}
 	
 	private class AccountForInsertImplForJUnit implements AccountForInsert {
