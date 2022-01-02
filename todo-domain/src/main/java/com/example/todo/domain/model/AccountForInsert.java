@@ -6,6 +6,11 @@ public interface AccountForInsert {
 	
 	String getName();
 	
+	/**
+	 * 暗号化後のパスワードを取得します。
+	 * 
+	 * @return 暗号化後のパスワード
+	 */
 	String getPassword();
 
 }

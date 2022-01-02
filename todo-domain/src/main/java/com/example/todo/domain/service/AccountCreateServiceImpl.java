@@ -13,41 +13,18 @@ import com.example.todo.domain.repository.account.AccountRepository;
 public class AccountCreateServiceImpl implements AccountCreateService {
 	
 	AccountRepository accountRepository;
+	AccountForInsertFactory accountForInsertFactory;
 	
 	@Inject
-	AccountCreateServiceImpl(AccountRepository accountRepository) {
+	AccountCreateServiceImpl(AccountRepository accountRepository, AccountForInsertFactory accountForInsertFactory) {
 		this.accountRepository = accountRepository;
+		this.accountForInsertFactory = accountForInsertFactory;
 	}
 
 	@Override
 	public void create(AccountForCreate account) {
-		AccountForInsertImpl accountForInsert = new AccountForInsertImpl(account);
+		AccountForInsert accountForInsert = accountForInsertFactory.create(account);
 		accountRepository.insert(accountForInsert);
 	}
 	
-	private class AccountForInsertImpl implements AccountForInsert {
-		
-		AccountForCreate account;
-		
-		AccountForInsertImpl(AccountForCreate account) {
-			this.account = account;
-		}
-
-		@Override
-		public String getId() {
-			return account.getId();
-		}
-
-		@Override
-		public String getName() {
-			return account.getName();
-		}
-
-		@Override
-		public String getPassword() {
-			return account.getPassword();
-		}
-		
-	}
-
 }
