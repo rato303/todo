@@ -85,7 +85,10 @@
         <property name="enableSpringELCompiler" value="true" />
         <property name="templateResolver" ref="templateResolver" />
         <property name="additionalDialects">
-            <bean class="com.example.todo.app.PageInfoDialect"/>
+            <set>
+                <bean class="com.example.todo.app.PageInfoDialect"/>
+                <bean class="org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect"/>
+            </set>
         </property>
     </bean>
     <bean id="beanNameViewResolver"
