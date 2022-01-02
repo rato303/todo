@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Account List</title>
@@ -16,7 +18,9 @@
       method="post">
       <button type="submit">Logout</button>
     </form>
-    <a th:href="@{/todo/list}">todo</a>
+    <div sec:authorize-url="/todo/list">
+      <a th:href="@{/todo/list}">todo</a>
+    </div>
   </div>
 
   <div>
