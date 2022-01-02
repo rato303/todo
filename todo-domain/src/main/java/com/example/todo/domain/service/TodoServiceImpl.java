@@ -1,8 +1,6 @@
 package com.example.todo.domain.service;
 
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -20,8 +18,6 @@ import com.example.todo.domain.repository.todo.TodoRepository;
 @Service // (1)
 @Transactional // (2)
 public class TodoServiceImpl implements TodoService {
-
-	private static final long MAX_UNFINISHED_COUNT = 50;
 
 	@Inject // (3)
 	TodoRepository todoRepository;
@@ -45,34 +41,6 @@ public class TodoServiceImpl implements TodoService {
 		List<Todo> todos = todoRepository.findAll(pageable);
 		Long todoCount = todoRepository.countAll();
 		return TodoListImpl.make(todos, todoCount, pageable);
-	}
-
-	@Override
-	public Todo create(Todo todo) {
-		long unfinishedCount = todoRepository.countByFinished(false);
-		if (unfinishedCount >= MAX_UNFINISHED_COUNT) {
-			ResultMessages messages = ResultMessages.error();
-			messages.add(ResultMessage
-					.fromText("[E001] The count of un-finished Todo must not be over " + MAX_UNFINISHED_COUNT + "."));
-			// (8)
-			throw new BusinessException(messages);
-		}
-
-		// (9)
-		String todoId = UUID.randomUUID().toString();
-		Date createdAt = new Date();
-
-		todo.setTodoId(todoId);
-		todo.setCreatedAt(createdAt);
-		todo.setFinished(false);
-
-		todoRepository.create(todo);
-		/*
-		 * REMOVE THIS LINE IF YOU USE JPA todoRepository.save(todo); // 10 REMOVE THIS
-		 * LINE IF YOU USE JPA
-		 */
-
-		return todo;
 	}
 
 	@Override
