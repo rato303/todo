@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 import com.example.todo.domain.model.Todo;
+import com.example.todo.domain.model.TodoForInsert;
 
 public interface TodoRepository {
 	
@@ -14,7 +15,7 @@ public interface TodoRepository {
 	
 	Long countAll();
 
-	void create(Todo todo);
+	void insert(TodoForInsert todo);
 
 	boolean update(Todo todo);
 

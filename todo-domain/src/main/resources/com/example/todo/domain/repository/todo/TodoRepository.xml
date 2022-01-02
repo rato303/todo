@@ -57,24 +57,22 @@
             todo
     </select>
 
-    <!-- (5) -->
-    <insert id="create" parameterType="Todo">
-    <![CDATA[
-        INSERT INTO todo
-        (
-            todo_id,
-            todo_title,
-            finished,
-            created_at
+    <insert
+      id="insert"
+      parameterType="com.example.todo.domain.model.TodoForInsert">
+        insert into todo (
+            todo_id
+          , todo_title
+          , finished
+          , created_at
+          , account_id
+        ) values (
+            #{id}
+          , #{title}
+          , #{finished}
+          , #{createdAt}
+          , #{accountId}
         )
-        VALUES
-        (
-            #{todoId},
-            #{todoTitle},
-            #{finished},
-            #{createdAt}
-        )
-    ]]>
     </insert>
 
     <!-- (6) -->
