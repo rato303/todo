@@ -11,12 +11,18 @@
     <sec:http>
         <sec:form-login
           login-page="/login"
-          authentication-success-forward-url="/todo/list" />
+          authentication-success-handler-ref="authenticationSuccessHandler" />
         <sec:logout
           logout-success-url="/login" />
         <sec:intercept-url
           pattern="/login/**"
           access="permitAll" />
+        <sec:intercept-url
+          pattern="/todo/list"
+          access="hasAuthority('todo')" />
+        <sec:intercept-url
+          pattern="/account/list"
+          access="hasAuthority('account')" />
         <sec:intercept-url
           pattern="/**"
           access="isAuthenticated()" />
@@ -24,6 +30,10 @@
         <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
         <sec:session-management />
     </sec:http>
+    
+    <bean
+      id="authenticationSuccessHandler"
+      class="com.example.todo.app.AuthenticationSuccessHandlerImpl" />
 
     <sec:authentication-manager>
       <sec:authentication-provider
