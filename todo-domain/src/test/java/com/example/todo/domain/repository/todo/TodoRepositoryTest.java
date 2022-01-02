@@ -12,13 +12,12 @@ import org.assertj.db.api.Assertions;
 import org.assertj.db.type.Changes;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.todo.domain.model.FindByAccountIdForTodo;
 import com.example.todo.domain.model.Todo;
 import com.example.todo.domain.model.TodoForInsert;
 
@@ -36,22 +35,35 @@ public class TodoRepositoryTest {
 	Changes changes;
 	
 	@Test
-	@Sql(scripts = "classpath:META-INF/TodoRepository/testFindAll.sql")
-	public void testFindAll() {
+	@Sql(scripts = "classpath:META-INF/TodoRepository/testFindByAccountId.sql")
+	public void testFindByAccountId() {
 		// Setup
-		int pageNumber = 0;
-		int pageSize = 5;
-		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		FindByAccountIdForTodoImplForJUnit params = new FindByAccountIdForTodoImplForJUnit();
+		params.offset = 0;
+		params.pageSize = 5;
+		params.accountId = "user1";
 
 		// Exercise
-		List<Todo> actuals = todoRepository.findAll(pageable);
+		List<Todo> actuals = todoRepository.findByAccountId(params);
 
 		// Verify
 		assertThat(actuals).isNotNull();
-		assertThat(actuals.size()).isEqualTo(pageSize);
+		assertThat(actuals.size()).isEqualTo(params.pageSize);
 
 		Todo actual1 = actuals.get(0);
 		assertThat(actual1.getTodoTitle()).isEqualTo("todo1");
+		
+		Todo actual2 = actuals.get(1);
+		assertThat(actual2.getTodoTitle()).isEqualTo("todo3");
+		
+		Todo actual3 = actuals.get(2);
+		assertThat(actual3.getTodoTitle()).isEqualTo("todo5");
+		
+		Todo actual4 = actuals.get(3);
+		assertThat(actual4.getTodoTitle()).isEqualTo("todo7");
+		
+		Todo actual5 = actuals.get(4);
+		assertThat(actual5.getTodoTitle()).isEqualTo("todo8");
 	}
 
 	@Test
@@ -101,6 +113,29 @@ public class TodoRepositoryTest {
 				.value("finished").isFalse()
 				.value("created_at").isEqualTo(Timestamp.valueOf(LocalDateTime.of(2022, 1, 2, 14, 46)))
 				.value("account_id").isEqualTo("account1");
+	}
+	
+	private class FindByAccountIdForTodoImplForJUnit implements FindByAccountIdForTodo {
+		
+		String accountId;
+		int pageSize;
+		int offset;
+
+		@Override
+		public String getAccountId() {
+			return accountId;
+		}
+
+		@Override
+		public int getPageSize() {
+			return pageSize;
+		}
+
+		@Override
+		public int getOffset() {
+			return offset;
+		}
+		
 	}
 
 	private class TodoForInsertImplForJUnit implements TodoForInsert {

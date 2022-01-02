@@ -27,25 +27,24 @@
             todo_id = #{todoId}
     ]]>
     </select>
-
-    <!-- (4) -->
+    
     <select
-        id="findAll"
+        id="findByAccountId"
         resultMap="todoResultMap"
-        parameterType="org.springframework.data.domain.Pageable">
-    <![CDATA[
-        SELECT
-            todo_id,
-            todo_title,
-            finished,
-            created_at
-        FROM
-            todo
-        order by
-            todo_title asc
-        limit #{pageSize}
-        offset #{offset}
-    ]]>
+        parameterType="com.example.todo.domain.model.FindByAccountIdForTodo">
+      select
+          t.todo_id
+        , t.todo_title
+        , t.finished
+        , t.created_at
+      from
+        todo t
+      where
+        t.account_id = #{accountId}
+      order by
+        t.todo_title asc
+      limit #{pageSize}
+      offset #{offset}
     </select>
     
     <select

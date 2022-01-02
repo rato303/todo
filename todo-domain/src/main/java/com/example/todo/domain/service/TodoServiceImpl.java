@@ -1,10 +1,7 @@
 package com.example.todo.domain.service;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.terasoluna.gfw.common.exception.BusinessException;
@@ -33,14 +30,6 @@ public class TodoServiceImpl implements TodoService {
 			throw new ResourceNotFoundException(messages);
 		}
 		return todo;
-	}
-
-	@Override
-	@Transactional(readOnly = true) // (7)
-	public TodoList findAll(Pageable pageable) {
-		List<Todo> todos = todoRepository.findAll(pageable);
-		Long todoCount = todoRepository.countAll();
-		return TodoListImpl.make(todos, todoCount, pageable);
 	}
 
 	@Override

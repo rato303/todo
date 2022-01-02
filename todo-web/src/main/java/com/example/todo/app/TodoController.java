@@ -23,6 +23,7 @@ import com.example.todo.app.TodoForm.TodoDelete;
 import com.example.todo.app.TodoForm.TodoFinish;
 import com.example.todo.domain.model.AccountUserDetails;
 import com.example.todo.domain.service.TodoCreateService;
+import com.example.todo.domain.service.TodoFindService;
 import com.example.todo.domain.service.TodoList;
 import com.example.todo.domain.service.TodoService;
 
@@ -35,6 +36,9 @@ public class TodoController {
     
     @Inject
     TodoCreateService todoCreateService;
+    
+    @Inject
+    TodoFindService todoFindService;
     
     static Pageable FIRST_PAGEABLE;
     
@@ -49,8 +53,8 @@ public class TodoController {
     }
 
     @RequestMapping(value = "list")
-    public String list(Model model, Pageable pageable) {
-        TodoList todos = todoService.findAll(pageable);
+    public String list(Model model, Pageable pageable, @AuthenticationPrincipal AccountUserDetails accountUserDetails) {
+        TodoList todos = todoFindService.find(new FindByAccountIdForTodoImpl(accountUserDetails, pageable));
         model.addAttribute("todos", todos);
         return "todo/list";
     }
@@ -63,14 +67,14 @@ public class TodoController {
             @AuthenticationPrincipal AccountUserDetails accountUserDetails) {
 
         if (bindingResult.hasErrors()) {
-            return list(model, FIRST_PAGEABLE);
+            return list(model, FIRST_PAGEABLE, accountUserDetails);
         }
 
         try {
             todoCreateService.create(todoForm.toTodoForCreate(accountUserDetails));
         } catch (BusinessException e) {
             model.addAttribute(e.getResultMessages());
-            return list(model, FIRST_PAGEABLE);
+            return list(model, FIRST_PAGEABLE, accountUserDetails);
         }
 
         attributes.addFlashAttribute(ResultMessages.success().add(
@@ -82,16 +86,16 @@ public class TodoController {
     public String finish(
             @Validated({ Default.class, TodoFinish.class }) TodoForm form,
             BindingResult bindingResult, Model model,
-            RedirectAttributes attributes) {
+            RedirectAttributes attributes, @AuthenticationPrincipal AccountUserDetails accountUserDetails) {
         if (bindingResult.hasErrors()) {
-            return list(model, FIRST_PAGEABLE);
+            return list(model, FIRST_PAGEABLE, accountUserDetails);
         }
 
         try {
             todoService.finish(form.getTodoId());
         } catch (BusinessException e) {
             model.addAttribute(e.getResultMessages());
-            return list(model, FIRST_PAGEABLE);
+            return list(model, FIRST_PAGEABLE, accountUserDetails);
         }
 
         attributes.addFlashAttribute(ResultMessages.success().add(
@@ -103,17 +107,17 @@ public class TodoController {
     public String delete(
             @Validated({ Default.class, TodoDelete.class }) TodoForm form,
             BindingResult bindingResult, Model model,
-            RedirectAttributes attributes) {
+            RedirectAttributes attributes, @AuthenticationPrincipal AccountUserDetails accountUserDetails) {
 
         if (bindingResult.hasErrors()) {
-            return list(model, FIRST_PAGEABLE);
+            return list(model, FIRST_PAGEABLE, accountUserDetails);
         }
 
         try {
             todoService.delete(form.getTodoId());
         } catch (BusinessException e) {
             model.addAttribute(e.getResultMessages());
-            return list(model, FIRST_PAGEABLE);
+            return list(model, FIRST_PAGEABLE, accountUserDetails);
         }
 
         attributes.addFlashAttribute(ResultMessages.success().add(
