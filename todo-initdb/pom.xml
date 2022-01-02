@@ -30,21 +30,6 @@
                 <db.delimiterType>row</db.delimiterType>
             </properties>
         </profile>
-        <profile>
-            <id>oracle</id>
-            <properties>
-                <db.encoding>UTF8</db.encoding>
-                <db.basedir>${project.basedir}/src/main/sqls/oracle</db.basedir>
-                <db.url>jdbc:oracle:thin:@127.0.0.1:1521:projectName</db.url>
-                <db.username>oracle</db.username>
-                <db.password>oracle</db.password>
-                <db.driver>oracle.jdbc.driver.OracleDriver</db.driver>
-                <db.groupId>com.oracle.database.jdbc</db.groupId>
-                <db.artifactId>ojdbc8</db.artifactId>
-                <db.version>${ojdbc.version}</db.version>
-                <db.delimiterType>row</db.delimiterType>
-            </properties>
-        </profile>
     </profiles>
 
     <build>
@@ -72,7 +57,7 @@
                     <fileset>
                         <basedir>${db.basedir}</basedir>
                         <includes>
-                            <include>0*.sql</include>
+                            <include>*.sql</include>
                         </includes>
                     </fileset>
                     <orderFile>ascending</orderFile>
