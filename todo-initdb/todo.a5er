@@ -43,7 +43,7 @@ PName=account
 LName=アカウント
 Comment=
 TableOption=
-Page=Main
+Page=MAIN
 Left=50
 Top=50
 Field="アカウント識別子","account_id","@VARCHAR(36)","NOT NULL",0,"","",$FFFFFFFF,""
@@ -53,7 +53,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20220101150723
-Position="Main",50,50
+Position="MAIN",50,50
 ZOrder=1
 
 [Entity]
@@ -61,7 +61,7 @@ PName=todo
 LName=TODO
 Comment=
 TableOption=
-Page=Main
+Page=MAIN
 Left=350
 Top=100
 Field="TODO識別子","todo_id","@VARCHAR(36)","NOT NULL",0,"","",$FFFFFFFF,""
@@ -73,7 +73,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20220101150754
-Position="Main",350,100
+Position="MAIN",350,100
 ZOrder=2
 
 [Relation]
@@ -96,3 +96,42 @@ Bar3=552
 TermPos1=R
 TermPos2=R
 ZOrder=4
+
+[Entity]
+PName=authority
+LName=権限
+Comment=
+TableOption=
+Page=Main
+Left=50
+Top=300
+Field="アカウント識別子","account_id","@VARCHAR(36)","NOT NULL",0,"","",$FFFFFFFF,""
+Field="権限名","name","@VARCHAR(36)","NOT NULL",1,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20220102171445
+Position="Main",50,300,221,50
+ZOrder=5
+
+[Relation]
+Entity1=account
+Entity2=authority
+RelationType1=2
+RelationType2=3
+Fields1=account_id
+Fields2=account_id
+Cardinarity1=
+Cardinarity2=
+Position="MAIN",0,4039,4302,5065,R,R,""
+Dependence=1
+Caption=
+PName=
+ModifiedDateTime=20220102171426
+LineMode=0
+Bar1=404
+Bar2=430
+Bar3=506
+TermPos1=R
+TermPos2=R
+ZOrder=6

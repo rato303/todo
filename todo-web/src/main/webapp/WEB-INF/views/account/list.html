@@ -23,8 +23,10 @@
       th:action="@{/account/create}"
       method="post"
       th:object="${accountForm}">
-      <input type="text" th:field="*{name}" />
-      <input type="password" th:field="*{password}" />
+      アカウント名：<input type="text" th:field="*{name}" /><br/>
+      パスワード：<input type="password" th:field="*{password}" /><br/>
+      権限(TODO)：<input type="checkbox" th:field="*{authorities}" th:value="todo" /><br/>
+      権限(アカウント)：<input type="checkbox" th:field="*{authorities}" th:value="account" /><br/>
       <button type="submit">Create Account</button>
     </form>
   </div>
