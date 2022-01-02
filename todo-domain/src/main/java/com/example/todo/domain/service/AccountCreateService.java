@@ -10,7 +10,12 @@ public interface AccountCreateService {
 		
 		String getName();
 		
-		String getPassword();
+		/**
+		 * 暗号化前のパスワードを取得します。
+		 * 
+		 * @return 暗号化前のパスワード
+		 */
+		String getRawPassword();
 		
 	}
 	

@@ -4,15 +4,29 @@
 
 <mapper namespace="com.example.todo.domain.repository.account.AccountRepository">
 
-    <resultMap id="todoResultMap" type="com.example.todo.domain.model.Account">
+    <resultMap id="account" type="com.example.todo.domain.model.Account">
         <id property="id" column="account_id" />
         <result property="name" column="account_name" />
+        <result property="password" column="password" />
     </resultMap>
+    
+    <select id="findByName"
+             parameterType="java.lang.String"
+             resultMap="account">
+      select
+          a.account_id
+        , a.account_name
+        , a.password
+      from
+        public.account a
+      where
+        a.account_name = #{name}
+    </select>
 
     <select
         id="findAll"
-        resultMap="todoResultMap"
-        parameterType="org.springframework.data.domain.Pageable">
+        parameterType="org.springframework.data.domain.Pageable"
+        resultMap="account">
       select
           a.account_id
         , a.account_name
