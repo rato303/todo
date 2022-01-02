@@ -40,7 +40,7 @@ public class TodoServiceImpl implements TodoService {
 	public TodoList findAll(Pageable pageable) {
 		List<Todo> todos = todoRepository.findAll(pageable);
 		Long todoCount = todoRepository.countAll();
-		return TodoListImpl.make(todos, todoCount, pageable);
+		return null;
 	}
 
 	@Override

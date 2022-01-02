@@ -20,6 +20,6 @@ public interface FindByAccountIdForTodo {
 	/**
 	 * @see Pageable#getOffset()
 	 */
-	long getOffset();
+	int getOffset();
 	
 }

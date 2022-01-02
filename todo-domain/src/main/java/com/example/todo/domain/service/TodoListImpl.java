@@ -6,9 +6,11 @@ import java.util.function.Function;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import com.example.todo.domain.model.FindByAccountIdForTodo;
 import com.example.todo.domain.model.Todo;
 
 class TodoListImpl implements TodoList {
@@ -98,8 +100,9 @@ class TodoListImpl implements TodoList {
 		return pagination.iterator();
 	}
 	
-	static TodoList  make(List<Todo> todos, long maxSize, Pageable pageable) {
+	static TodoList  make(List<Todo> todos, long maxSize, FindByAccountIdForTodo params) {
 		TodoListImpl instance = new TodoListImpl();
+		Pageable pageable = PageRequest.of(params.getOffset(), params.getPageSize());
 		instance.pagination = new PageImpl<Todo>(todos, pageable, maxSize);
 		return instance;
 	}

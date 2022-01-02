@@ -153,7 +153,7 @@ public class TodoRepositoryTest {
 		}
 
 		@Override
-		public long getOffset() {
+		public int getOffset() {
 			return offset;
 		}
 		
