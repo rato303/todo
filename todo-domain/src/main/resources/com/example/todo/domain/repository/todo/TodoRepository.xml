@@ -49,6 +49,25 @@
     </select>
     
     <select
+        id="findByAccountId"
+        resultMap="todoResultMap"
+        parameterType="com.example.todo.domain.model.FindByAccountIdForTodo">
+      select
+          t.todo_id
+        , t.todo_title
+        , t.finished
+        , t.created_at
+      from
+        todo t
+      where
+        t.account_id = #{accountId}
+      order by
+        t.todo_title asc
+      limit #{pageSize}
+      offset #{offset}
+    </select>
+    
+    <select
         id="countAll"
         resultType="java.lang.Long">
         select

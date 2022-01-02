@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 
+import com.example.todo.domain.model.FindByAccountIdForTodo;
 import com.example.todo.domain.model.Todo;
 import com.example.todo.domain.model.TodoForInsert;
 
@@ -12,6 +13,8 @@ public interface TodoRepository {
 	Todo findOne(String todoId);
 
 	List<Todo> findAll(Pageable pageable);
+	
+	List<Todo> findByAccountId(FindByAccountIdForTodo params);
 	
 	Long countAll();
 
