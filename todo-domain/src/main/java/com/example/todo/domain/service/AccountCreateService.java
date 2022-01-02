@@ -1,5 +1,9 @@
 package com.example.todo.domain.service;
 
+import java.util.List;
+
+import com.example.todo.domain.model.Authority;
+
 public interface AccountCreateService {
 
 	void create(AccountForCreate account);
@@ -17,6 +21,7 @@ public interface AccountCreateService {
 		 */
 		String getRawPassword();
 		
+		List<Authority> getAuthorities();
 	}
 	
 }
