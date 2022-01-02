@@ -9,46 +9,54 @@
        th:href="@{/resources/app/css/styles.css}">
 </head>
 <body>
-    <h1>Todo List</h1>
+  <h1>Todo List</h1>
+    
+  <div>
+    <form
+      th:action="@{/logout}"
+      method="post">
+      <button type="submit">Logout</button>
+    </form>
+  </div>
 
-    <div id="todoForm">
+  <div id="todoForm">
+    <form
+      th:action="@{/todo/create}"
+      method="post" th:object="${todoForm}">
+      <input type="text" th:field="*{todoTitle}" />
+      <button type="submit">Create Todo</button>
+    </form>
+  </div>
+  <hr />
+  <div id="todoList">
+    <ul>
+      <li th:each="todo : ${todos}">
+        <span th:text="${todo.todoTitle}" th:class="${todo.finished}? 'strike' : ''">タスク名</span>
         <form
-          th:action="@{/todo/create}"
-          method="post" th:object="${todoForm}">
-            <input type="text" th:field="*{todoTitle}" />
-            <button type="submit">Create Todo</button>
+            th:action="@{/todo/finish}"
+            method="post"
+            th:object="${todoForm}"
+            style="display: inline-block;">
+          <input type="hidden"
+                  name="todoId"
+                  th:value="${todo.todoId}">
+          <button type="submit">Finish</button>
         </form>
-    </div>
-    <hr />
-    <div id="todoList">
-        <ul>
-            <li th:each="todo : ${todos}">
-                <span th:text="${todo.todoTitle}" th:class="${todo.finished}? 'strike' : ''">タスク名</span>
-                <form
-                    th:action="@{/todo/finish}"
-                    method="post"
-                    th:object="${todoForm}"
-                    style="display: inline-block;">
-                    <input type="hidden"
-                            name="todoId"
-                            th:value="${todo.todoId}">
-                    <button type="submit">Finish</button>
-                </form>
-                <form
-                    th:action="@{/todo/delete}"
-                    method="post"
-                    th:object="${todoForm}"
-                    style="display: inline-block;">
-                    <input type="hidden"
-                            name="todoId"
-                            th:value="${todo.todoId}">
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-            <li>
-                <div th:object="${todos}" th:replace="~{fragment/pagination :: pagination (${todos})}"></div>
-            </li>
-        </ul>
-    </div>
+        <form
+            th:action="@{/todo/delete}"
+            method="post"
+            th:object="${todoForm}"
+            style="display: inline-block;">
+          <input type="hidden"
+                  name="todoId"
+                  th:value="${todo.todoId}">
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+      <li>
+        <div th:object="${todos}" th:replace="~{fragment/pagination :: pagination (${todos})}"></div>
+      </li>
+    </ul>
+  </div>
 </body>
 </html>
