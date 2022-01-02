@@ -5,6 +5,7 @@ import javax.validation.groups.Default;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,10 +21,10 @@ import org.terasoluna.gfw.common.message.ResultMessages;
 import com.example.todo.app.TodoForm.TodoCreate;
 import com.example.todo.app.TodoForm.TodoDelete;
 import com.example.todo.app.TodoForm.TodoFinish;
-import com.example.todo.domain.model.Todo;
+import com.example.todo.domain.model.AccountUserDetails;
+import com.example.todo.domain.service.TodoCreateService;
 import com.example.todo.domain.service.TodoList;
 import com.example.todo.domain.service.TodoService;
-import com.github.dozermapper.core.Mapper;
 
 @Controller
 @RequestMapping("todo")
@@ -31,9 +32,9 @@ public class TodoController {
 	
     @Inject
     TodoService todoService;
-
+    
     @Inject
-    Mapper beanMapper;
+    TodoCreateService todoCreateService;
     
     static Pageable FIRST_PAGEABLE;
     
@@ -58,16 +59,15 @@ public class TodoController {
     public String create(
             @Validated({ Default.class, TodoCreate.class }) TodoForm todoForm,
             BindingResult bindingResult, Model model,
-            RedirectAttributes attributes) {
+            RedirectAttributes attributes,
+            @AuthenticationPrincipal AccountUserDetails accountUserDetails) {
 
         if (bindingResult.hasErrors()) {
             return list(model, FIRST_PAGEABLE);
         }
 
-        Todo todo = beanMapper.map(todoForm, Todo.class);
-
         try {
-            todoService.create(todo);
+            todoCreateService.create(todoForm.toTodoForCreate(accountUserDetails));
         } catch (BusinessException e) {
             model.addAttribute(e.getResultMessages());
             return list(model, FIRST_PAGEABLE);
