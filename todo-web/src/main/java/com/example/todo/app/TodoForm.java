@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.example.todo.domain.model.TodoForCreate;
+
 public class TodoForm implements Serializable {
 	public static interface TodoCreate {
 	};
@@ -40,6 +42,30 @@ public class TodoForm implements Serializable {
 
 	public void setTodoTitle(String todoTitle) {
 		this.todoTitle = todoTitle;
+	}
+	
+	public TodoForCreate toTodoForCreate() {
+		return new TodoForCreateImpl(this);
+	}
+	
+	private class TodoForCreateImpl implements TodoForCreate {
+		
+		TodoForm form;
+		
+		TodoForCreateImpl(TodoForm form) {
+			this.form = form;
+		}
+
+		@Override
+		public String getTitle() {
+			return form.getTodoTitle();
+		}
+
+		@Override
+		public String getAccountId() {
+			return "account1";
+		}
+		
 	}
 
 }
