@@ -6,9 +6,35 @@
 <link rel="stylesheet"
        href="../../../resources/app/css/styles.css"
        th:href="@{/resources/app/css/styles.css}">
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function() {
+	document.getElementById('uploadButton').addEventListener('click', function() {
+		const formData = new FormData(document.getElementById('fileUploadForm'));
+		const request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log('upload complete');
+			}
+		}
+		request.open("POST", "/todo-web/upload");
+		request.responseType = 'blob';
+		request.send(formData);
+	});
+	document.getElementById('hoge').addEventListener('click', function() {
+		const request = new XMLHttpRequest();
+		request.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log('upload complete');
+			}
+		}
+		request.open("GET", "/todo-web/hoge");
+		request.send();
+	});
+});
+</script>
 </head>
 <body>
-    <h1>ファイルアップロード</h1>
+    <h1>同期ファイルアップロード</h1>
     <div>
         <form
           th:action="@{/file-upload/upload}"
@@ -19,5 +45,13 @@
           <button type="submit">Upload</button>
         </form>
     </div>
+    <h1>非同期ファイルアップロード</h1>
+    <div>
+        <form id="fileUploadForm">
+          <input type="file" name="uploadFile" /><br/>
+          <button id="uploadButton" type="button">Upload</button>
+        </form>
+    </div>
+    <button id="hoge" type="button">Hoge</button>
 </body>
 </html>

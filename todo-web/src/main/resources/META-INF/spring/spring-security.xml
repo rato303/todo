@@ -14,12 +14,12 @@
           authentication-success-forward-url="/todo/list" />
         <sec:logout
           logout-success-url="/login" />
-        <sec:intercept-url
-          pattern="/login/**"
-          access="permitAll" />
-        <sec:intercept-url
-          pattern="/**"
-          access="isAuthenticated()" />
+<!--         <sec:intercept-url -->
+<!--           pattern="/login/**" -->
+<!--           access="permitAll" /> -->
+<!--         <sec:intercept-url -->
+<!--           pattern="/**" -->
+<!--           access="isAuthenticated()" /> -->
         <sec:access-denied-handler ref="accessDeniedHandler"/>
         <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
         <sec:session-management />
