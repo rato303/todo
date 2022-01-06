@@ -6,9 +6,73 @@
 <link rel="stylesheet"
        href="../../../resources/app/css/styles.css"
        th:href="@{/resources/app/css/styles.css}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
+$(document).ready(function() {
+
+    $("#uploadButton").click(function(event) {
+
+        // Stop default form Submit.
+        event.preventDefault();
+
+        // Call Ajax Submit.
+
+        ajaxSubmitForm();
+
+    });
+
+});
+function ajaxSubmitForm() {
+
+    // Get form
+    var form = $('#fileUploadForm')[0];
+
+    var data = new FormData(form);
+
+
+    $("#submitButton").prop("disabled", true);
+
+    $.ajax({
+        type: "POST",
+        enctype: 'multipart/form-data',
+        url: "/todo-web/moge",
+        data: data,
+
+        // prevent jQuery from automatically transforming the data into a query string
+        processData: false,
+        contentType: false,
+        cache: false,
+        timeout: 1000000,
+        success: function(data, textStatus, jqXHR) {
+            console.log("SUCCESS : ", data);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {  
+            console.log("ERROR : ", jqXHR.responseText);
+        }
+    });
+
+}
 document.addEventListener("DOMContentLoaded", function() {
 	document.getElementById('uploadButton').addEventListener('click', function() {
+		var form = $('#fileUploadForm')[0];
+		var data = new FormData(form);
+		$.ajax({
+			type: "POST",
+			enctype: 'multipart/form-data',
+			url: "/todo-web/moge",
+	        data: data,
+	        processData: false,//prevent jQuery from automatically transforming the data into a query string
+	        contentType: false,
+	        cache: false,
+	        timeout: 600000,
+	        success: function (data) {
+	            console.log("SUCCESS : ", data);
+	        },
+	        error: function (e) {
+	            console.log("ERROR : ", e);
+	        }
+	    });
+		/*
 		const formData = new FormData(document.getElementById('fileUploadForm'));
 		const request = new XMLHttpRequest();
 		request.onreadystatechange = function() {
@@ -19,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		request.open("POST", "/todo-web/upload");
 		request.responseType = 'blob';
 		request.send(formData);
+		*/
 	});
 	document.getElementById('hoge').addEventListener('click', function() {
 		const request = new XMLHttpRequest();
@@ -47,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
     <h1>非同期ファイルアップロード</h1>
     <div>
-        <form id="fileUploadForm">
+        <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
           <input type="file" name="uploadFile" /><br/>
           <button id="uploadButton" type="button">Upload</button>
         </form>
