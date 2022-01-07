@@ -1,95 +1,102 @@
 package com.example.todo.app;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@RequestMapping("file-upload")
+@RequestMapping("upload")
 @Controller
 public class FileUploadController {
-
-	@ModelAttribute
-	public FileUploadForm setFileUploadForm() {
-		return new FileUploadForm();
-	}
-	
-	@RequestMapping(method = RequestMethod.GET)
-	public String uploadForm() {
-		return "file/upload_form";
-	}
-	
 	/**
-	 * ファイルアップロードサンプル
-	 * 
-	 * @param fileUploadForm
-	 * @param result
-	 * @param redirectAttributes
-	 * @return
+	 * LOGGER
 	 */
-	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public String upload(@Validated FileUploadForm fileUploadForm, BindingResult result, RedirectAttributes redirectAttributes) {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileUploadController.class);
 
+	/**
+	 * ★ポイント9 define max upload file size
+	 */
+	private static final long MAX_FILE_SIZE = 500 * 1024 * 1024;
+
+	/**
+	 * ★ポイント9 buffer size 1MB
+	 */
+	private static final int BUFFER_SIZE = 1 * 1024 * 1024;
+
+	// ★ポイント10
+	@RequestMapping(path = "chunked", method = RequestMethod.POST)
+	public ResponseEntity<String> streamUpload(@Validated StreamFile streamFile, BindingResult result) {
+
+		// ★ポイント11
 		if (result.hasErrors()) {
-			return "file/upload_form";
+			LOGGER.debug("validated error = {}", result.getAllErrors());
+			return new ResponseEntity<String>("validated error!", HttpStatus.BAD_REQUEST);
 		}
 
-		MultipartFile uploadFile = fileUploadForm.getFile();
-
-		if (uploadFile.isEmpty()) {
-			result.rejectValue(uploadFile.getName(), "e.xx.at.6003");
-			return "file/upload_form";
+		// ★ポイント12
+		if (MAX_FILE_SIZE < streamFile.getContentLength()) {
+			return fileSizeOverEntity();
 		}
 
-		InputStream inputStream = null;
-		OutputStream outputStream = null;
+		// ★ポイント13
 		try {
-			inputStream = uploadFile.getInputStream();
-			outputStream = new FileOutputStream(new File("C:\\home\\developer\\workspace\\after_upload.txt"));
-
-			int read = 0;
-			byte[] bytes = new byte[1024];
-
-			while ((read = inputStream.read(bytes)) != -1) {
-				outputStream.write(bytes, 0, read);
+			File uploadFile = File.createTempFile("upload", null);
+			InputStream input = streamFile.getInputStream();
+			try (OutputStream output = new BufferedOutputStream(new FileOutputStream(uploadFile))) {
+				byte[] buffer = new byte[BUFFER_SIZE];
+				long total = 0;
+				int len = 0;
+				while ((len = input.read(buffer)) != -1) {
+					output.write(buffer, 0, len);
+					output.flush();
+					total = total + len;
+					LOGGER.debug("writed : " + total);
+					// ★ポイント12
+					if (MAX_FILE_SIZE < total) {
+						return fileSizeOverEntity();
+					}
+				}
 			}
+			LOGGER.debug(uploadFile.getAbsolutePath());
+			// ★ポイント14
+			return new ResponseEntity<String>("success!", HttpStatus.CREATED);
 		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} finally {
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if (outputStream != null) {
-				try {
-					outputStream.flush();
-					outputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-			}
+			LOGGER.error(e.getMessage());
+			// ★ポイント15
+			return new ResponseEntity<String>("error!", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		return "redirect:/file-upload/complete";
 	}
 
-	@RequestMapping(value = "/complete", method = RequestMethod.GET)
-	public String uploadComplete() {
-		return "file/upload_complete";
+	/**
+	 * ★ポイント12
+	 * 
+	 * @return ファイルサイズ超過エラー時のResponseEntity
+	 */
+	private ResponseEntity<String> fileSizeOverEntity() {
+		return new ResponseEntity<String>("file size is too large. " + MAX_FILE_SIZE + "(byte) or less",
+				HttpStatus.BAD_REQUEST);
+	}
+
+	/**
+	 * アップロードフォーム画面を表示する
+	 * 
+	 * @return アップロードフォーム画面
+	 */
+	@RequestMapping(path = "form", method = RequestMethod.GET)
+	public String form() {
+		return "upload/form";
 	}
 
 }

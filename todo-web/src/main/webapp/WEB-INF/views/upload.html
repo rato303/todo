@@ -1,27 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-<title>Upload Files</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript" th:src="@{/resources/main.js}"></script>
+<meta charset="utf-8">
+<title>upload</title>
 </head>
 <body>
-	<h1>Spring Boot File Upload with jQuery Ajax</h1>
-	<form method="POST" enctype="multipart/form-data" id="fileUploadForm">
-		Description: <br /> <input type="text" name="description"
-			style="width: 350px;" /> <br />
-		<br /> File to upload (1): <input type="file" name="files" /><br />
-		File to upload (2): <input type="file" name="files" /><br /> File to
-		upload (3): <input type="file" name="files" /><br /> File to upload
-		(4): <input type="file" name="files" /><br /> File to upload (5): <input
-			type="file" name="files" /><br /> <input type="submit"
-			value="Submit" id="submitButton" />
-	</form>
-	<h2>Upload Results:</h2>
-	<div style="border: 1px solid #ccc; padding: 5px;">
-		<span id="result"></span>
-	</div>
+    <div id="wrapper">
+        <div>
+            <input id="uploadFile" type="file" />
+        </div>
+        <div>
+            <input id="uploadButton" type="button" value="送信" />
+        </div>
+        <div>
+            <p id="message">ファイルを選択して「送信」ボタンを押してください。</p>
+        </div>
+        <div>
+            <progress id="uploadProgress" max="100" value="0"></progress>
+        </div>
+    </div>
+    <script type="text/javascript">
+        (function() {
 
+            var post_file = function(upload_file) {
+                var maeesage = document.getElementById("message");
+                maeesage.innerHTML = "アップロード中です。";
+
+                // ★ポイント1
+                var content_length = upload_file.size
+                var content_type = upload_file.type
+                var file_name = upload_file.name;
+
+                // ★ポイント2
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/todo-web/upload/chunked', true);
+                xhr.setRequestHeader('Content-type', content_type);
+                xhr.setRequestHeader('Content-Length', content_length);
+                xhr.setRequestHeader('X-FILE-NAME', file_name);
+
+                // ★ポイント3
+                xhr.onload = function(e) {
+                    if (this.readyState == 4) {
+                        maeesage.innerHTML = "アップロードが完了しました。";
+                    }
+                };
+
+                // ★ポイント4
+                var progress = document.getElementById("uploadProgress");
+                xhr.upload.onprogress = function(e) {
+                    if (e.lengthComputable) {
+                        progress.value = (e.loaded / e.total) * 100;
+                    }
+                };
+
+                // ★ポイント5
+                xhr.send(upload_file);
+            };
+
+            // ★ポイント6
+            document.getElementById("uploadButton").addEventListener(
+                    'click',
+                    function() {
+                        var element_file = document
+                                .getElementById("uploadFile");
+                        var upload_file = element_file.files[0];
+
+                        post_file(upload_file);
+                    }, false);
+        })();
+    </script>
 </body>
 </html>

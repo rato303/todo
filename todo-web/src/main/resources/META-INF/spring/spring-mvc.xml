@@ -23,6 +23,7 @@
             </bean>
             <bean
                 class="org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver" />
+            <bean class="com.example.todo.app.StreamFileModelAttributeMethodProcessor"/>
         </mvc:argument-resolvers>
     </mvc:annotation-driven>
 
